@@ -1,0 +1,58 @@
+name: Build Installers
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11' 
+        # using 3.11 for stability, 3.12 is newish for some libraries
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r backend/requirements.txt
+        pip install pyinstaller imageio-ffmpeg
+
+    - name: Install Frontend Dependencies and Build
+      run: |
+        cd frontend
+        npm install
+        npm run build
+
+    - name: Build Executable with PyInstaller
+      run: |
+        python build_exe.py
+
+    - name: Upload Build Artifact (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: WhisperAI-Windows
+        path: dist/WhisperAI
+
+    - name: Upload Build Artifact (macOS)
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: WhisperAI-macOS
+        path: dist/WhisperAI
