@@ -20,61 +20,42 @@ export interface Project {
 export const PROJECTS: Project[] = [
     {
         id: '1',
-        title: 'Assento em Resina',
-        color: 'Verde Musgo',
+        title: 'Modelo Borboleta',
+        color: 'Transparente/Azul',
         client: 'Ana - SP',
         daysToMake: 12,
-        imageUrl: '/images/assento-verde-thumb.jpg', // Placeholder
-        fullImageUrl: '/images/assento-verde-full.jpg', // Placeholder
-        testimonial: 'Ficou exatamente como imaginei! A cor combinou perfeitamente com meu banheiro antigo.'
+        imageUrl: '/images/resina-oval-borboleta-azul.jpg',
+        fullImageUrl: '/images/resina-borboleta-azul-aberto.jpg',
+        testimonial: 'Ficou exatamente como imaginei! A transparência deu um toque único ao banheiro.'
     },
     {
         id: '2',
-        title: 'Assento Clean',
-        color: 'Branco Neve',
+        title: 'Modelo Peixes',
+        color: 'Fundo do Mar Vermelho',
         client: 'Roberto - RJ',
         daysToMake: 10,
-        imageUrl: '/images/assento-branco-thumb.jpg',
-        fullImageUrl: '/images/assento-branco-full.jpg',
-        testimonial: 'Acabamento impecável. É pesado e não escorrega.'
+        imageUrl: '/images/resina-vermelha-peixes.jpg',
+        fullImageUrl: '/images/resina-vermelha-peixes-aberto.jpg',
+        testimonial: 'Acabamento impecável. É pesado e não escorrega. Meus netos adoraram.'
     },
     {
         id: '3',
-        title: 'Assento Madeira',
-        color: 'Carvalho',
+        title: 'Modelo Peixes',
+        color: 'Fundo do Mar Preto',
         client: 'Carla - MG',
         daysToMake: 15,
-        imageUrl: '/images/assento-madeira-thumb.jpg',
-        fullImageUrl: '/images/assento-madeira-full.jpg',
+        imageUrl: '/images/resina-preta-peixes.jpg',
+        fullImageUrl: '/images/resina-preta-peixes.jpg', // Using same for now as we don't have open view
         testimonial: 'Deu outra vida pro lavabo. Super sofisticado.'
     },
     {
         id: '4',
-        title: 'Assento Resina',
-        color: 'Preto Total',
+        title: 'Resina Black',
+        color: 'Preto Sólido/Marmorizado',
         client: 'Marcos - PR',
         daysToMake: 11,
-        imageUrl: '/images/assento-preto-thumb.jpg',
-        fullImageUrl: '/images/assento-preto-full.jpg',
-    },
-    {
-        id: '5',
-        title: 'Assento Resina',
-        color: 'Areia',
-        client: 'Luciana - BA',
-        daysToMake: 13,
-        imageUrl: '/images/assento-areia-thumb.jpg',
-        fullImageUrl: '/images/assento-areia-full.jpg',
-        testimonial: 'Atendimento nota 10. Chegou super bem embalado.'
-    },
-    {
-        id: '6',
-        title: 'Assento Glitter',
-        color: 'Prata',
-        client: 'Beatriz - SP',
-        daysToMake: 14,
-        imageUrl: '/images/assento-prata-thumb.jpg',
-        fullImageUrl: '/images/assento-prata-full.jpg',
+        imageUrl: '/images/resina-oval-preta.jpg',
+        fullImageUrl: '/images/resina-oval-preta.jpg',
     }
 ];
 
@@ -95,10 +76,11 @@ export function ProjectGrid() {
                     >
                         {/* Image Area */}
                         <div className="aspect-square bg-gray-100 relative overflow-hidden">
-                            {/* Placeholder for actual image */}
-                            <div className="absolute inset-0 flex items-center justify-center text-gray-300 bg-gray-50 group-hover:scale-105 transition-transform duration-500">
-                                <span className="text-xs">FOTO {project.color}</span>
-                            </div>
+                            <img
+                                src={project.imageUrl}
+                                alt={project.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
 
                             {/* Overlay on Hover */}
                             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
@@ -150,14 +132,18 @@ export function ProjectGrid() {
                         >
                             <button
                                 onClick={() => setSelectedProject(null)}
-                                className="absolute top-4 right-4 z-20 bg-white/50 hover:bg-white rounded-full p-2 transition-colors"
+                                className="absolute top-4 right-4 z-20 bg-white/50 hover:bg-white rounded-full p-2 transition-colors shadow-sm"
                             >
                                 <X className="w-5 h-5 text-gray-800" />
                             </button>
 
                             {/* Left: Image (High Res) */}
-                            <div className="bg-gray-100 min-h-[300px] md:min-h-full flex items-center justify-center p-8">
-                                <span className="text-gray-400 font-bold text-xl tracking-widest">[FOTO ALTA RESOLUÇÃO]</span>
+                            <div className="bg-gray-100 min-h-[300px] md:min-h-full flex items-center justify-center p-0 overflow-hidden">
+                                <img
+                                    src={selectedProject.fullImageUrl}
+                                    alt={selectedProject.title}
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
 
                             {/* Right: Details */}
@@ -260,11 +246,15 @@ export function CatalogSection() {
             {/* MATERIALS */}
             <div>
                 <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">B. Materiais Premium</h3>
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-1 gap-6">
                     {/* RESINA */}
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row">
                         <div className="bg-gray-100 md:w-1/3 min-h-[150px] relative">
-                            <div className="absolute inset-0 flex items-center justify-center text-gray-400 font-bold text-xs">[FOTO TEXTURA]</div>
+                            <img
+                                src="/images/resina-oval-borboleta-azul.jpg"
+                                alt="Textura Resina"
+                                className="w-full h-full object-cover"
+                            />
                         </div>
                         <div className="p-6 md:w-2/3 flex flex-col justify-center">
                             <div className="flex justify-between items-start mb-2">
@@ -277,25 +267,6 @@ export function CatalogSection() {
                                 <li className="text-sm text-gray-600 flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> 100% Impermeável</li>
                             </ul>
                             <p className="text-gray-500 text-xs">A partir de <span className="text-gray-900 font-bold text-base">R$ 409,90</span></p>
-                        </div>
-                    </div>
-
-                    {/* MADEIRA */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row opacity-80 hover:opacity-100 transition-opacity">
-                        <div className="bg-amber-100 md:w-1/3 min-h-[150px] relative">
-                            <div className="absolute inset-0 flex items-center justify-center text-amber-800/50 font-bold text-xs">[FOTO VEIOS]</div>
-                        </div>
-                        <div className="p-6 md:w-2/3 flex flex-col justify-center">
-                            <div className="flex justify-between items-start mb-2">
-                                <h4 className="font-black text-gray-900">MADEIRA MACIÇA</h4>
-                                <span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-1 rounded">Nobre</span>
-                            </div>
-                            <ul className="space-y-1 mb-4">
-                                <li className="text-sm text-gray-600 flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Cada peça é única</li>
-                                <li className="text-sm text-gray-600 flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Toque quente/natural</li>
-                                <li className="text-sm text-gray-600 flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Envelhecimento nobre</li>
-                            </ul>
-                            <p className="text-gray-500 text-xs">A partir de <span className="text-gray-900 font-bold text-base">R$ 589,90</span></p>
                         </div>
                     </div>
                 </div>

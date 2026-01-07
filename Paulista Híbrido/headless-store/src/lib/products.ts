@@ -117,16 +117,18 @@ export const PRODUCTS: Product[] = [
     name: 'Versão Luxo (Resina)',
     shape: 'oval',
     price: 409.9,
-    features: ['Alto Brilho e Design', 'Cores Exclusivas'],
-    imageUrl: '/images/assento-oval-premium-1.jpg'
+    features: ['Alto Brilho e Design', 'Cores Exclusivas', 'Incluso: Borboleta Azul'],
+    imageUrl: '/images/resina-oval-borboleta-azul.jpg',
+    images: ['/images/resina-oval-borboleta-azul.jpg', '/images/resina-borboleta-azul-aberto.jpg', '/images/resina-oval-preta.jpg']
   },
   {
     id: 'lux-round',
     name: 'Versão Luxo (Resina)',
     shape: 'universal',
     price: 409.9,
-    features: ['Alto Brilho e Design', 'Cores Exclusivas'],
-    imageUrl: '/images/redondo-comum.png'
+    features: ['Alto Brilho e Design', 'Cores Exclusivas', 'Modelo: Peixes'],
+    imageUrl: '/images/resina-vermelha-peixes.jpg',
+    images: ['/images/resina-vermelha-peixes.jpg', '/images/resina-vermelha-peixes-aberto.jpg', '/images/resina-preta-peixes.jpg']
   }
 ];
 
