@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, Star } from 'lucide-react';
+import { X, Check } from 'lucide-react';
 import { getWhatsAppUrl } from '@/lib/products';
+import { reportConversion } from '@/lib/googleAds';
 
 // MOCK DATA FOR PROJECTS
 export interface Project {
@@ -180,10 +181,18 @@ export function ProjectGrid() {
                                     </div>
                                 </div>
 
+
+
                                 <div className="mt-auto pt-6 border-t border-gray-100">
                                     <p className="text-center text-sm text-gray-500 mb-3">Gostou deste estilo?</p>
                                     <a
                                         href={getWhatsAppUrl(`Olá! Vi o projeto "${selectedProject.title}" na cor ${selectedProject.color} e queria um orçamento para um parecido.`)}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            reportConversion(
+                                                getWhatsAppUrl(`Olá! Vi o projeto "${selectedProject.title}" na cor ${selectedProject.color} e queria um orçamento para um parecido.`)
+                                            );
+                                        }}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="block w-full bg-green-600 hover:bg-green-700 text-white font-bold text-center py-4 rounded-xl shadow-lg shadow-green-200 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
@@ -192,6 +201,7 @@ export function ProjectGrid() {
                                         QUERO UM IGUAL A ESTE
                                     </a>
                                 </div>
+
                             </div>
                         </motion.div>
                     </div>

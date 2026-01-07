@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Clock, Hammer, Package, ArrowRight, Star } from 'lucide-react';
 import { ProjectGrid, CatalogSection, FaqSection } from '@/components/GalleryComponents';
 import { getWhatsAppUrl } from '@/lib/products';
+import { reportConversion } from '@/lib/googleAds';
 
 export default function GalleryPage() {
     return (
@@ -154,6 +155,10 @@ export default function GalleryPage() {
                     <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 shadow-2xl">
                         <a
                             href={getWhatsAppUrl("Olá! Quero falar com um especialista sobre um assento personalizado (Vim pela Galeria).")}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                reportConversion(getWhatsAppUrl("Olá! Quero falar com um especialista sobre um assento personalizado (Vim pela Galeria)."));
+                            }}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="block w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-900 font-black text-xl md:text-2xl py-5 rounded-full shadow-lg shadow-amber-500/20 transform hover:scale-[1.02] transition-all mb-4 flex items-center justify-center gap-3"

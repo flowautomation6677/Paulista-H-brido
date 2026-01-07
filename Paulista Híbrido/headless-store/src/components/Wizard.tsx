@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { reportConversion } from '@/lib/googleAds';
 import { Camera, ArrowRight, Maximize2, X } from 'lucide-react';
 import { getRecommendations, getCheckoutUrl, getWhatsAppUrl } from '@/lib/products';
 import { clsx } from 'clsx';
@@ -289,6 +290,10 @@ export default function Wizard() {
 
                                                     <a
                                                         href={getCheckoutUrl(bestChoice)}
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            reportConversion(getCheckoutUrl(bestChoice));
+                                                        }}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="group block w-full py-4 bg-gradient-to-b from-green-500 to-green-600 text-white rounded-xl font-bold text-lg hover:from-green-600 hover:to-green-700 transition-all shadow-lg hover:shadow-green-300/50 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
