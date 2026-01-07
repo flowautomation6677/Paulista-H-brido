@@ -6,6 +6,7 @@ export interface Product {
   price: number;
   originalPrice?: number; // For "De: R$ XX,XX"
   imageUrl?: string;
+  images?: string[]; // Multiple images for carousel
   holeDistance?: string; // e.g. "15cm"
   technicalDiagramUrl?: string; // URL for the measurement diagram
   features?: string[]; // Bullet points like "Batida Suave", "Acabamento impecável"
@@ -29,13 +30,14 @@ export interface ProductRecommendations {
 export const PRODUCTS: Product[] = [
   {
     id: '123456789', // Example ID
-    name: 'Assento Sanitário Oval Premium',
+    name: 'Assento Sanitário Almofadado Oval Premium',
     shape: 'oval',
-    price: 189.9,
+    price: 189.90,
     originalPrice: 220,
     holeDistance: '15cm',
     features: ['O melhor custo-benefício', 'Batida Suave (Não faz barulho)', 'Acabamento impecável e fácil limpeza'],
     rating: { stars: 5, count: 42 },
+    images: ['/images/assento-oval-premium-1.jpg', '/images/assento-oval-premium-2.jpg', '/images/assento-oval-premium-3.jpg'],
     testimonial: {
       name: 'Ana P.',
       text: 'Encaixou perfeito no meu vaso Deca oval. Instalação fácil.'
@@ -43,13 +45,14 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: '987654321',
-    name: 'Assento Quadrado Premium (Soft Close)',
+    name: 'Assento Quadrado Premium',
     shape: 'square',
     price: 189.9,
     originalPrice: 220,
     imageUrl: '/images/quadrado-branco.png',
+    images: ['/images/assento-premium-1.png', '/images/assento-premium-2.png', '/images/assento-quadrado-3.png'],
     holeDistance: '15cm',
-    features: ['O melhor custo-benefício', 'Batida Suave (Não faz barulho)', 'Acabamento impecável e fácil limpeza'],
+    features: ['O melhor custo-benefício', 'Fecha sem barulho (Soft Close)', 'Acabamento impecável e fácil limpeza'],
     rating: { stars: 5, count: 42 },
     testimonial: {
       name: 'Carlos M.',
@@ -69,13 +72,36 @@ export const PRODUCTS: Product[] = [
       text: 'Simples e funcional. Resolveu meu problema.'
     }
   },
+  {
+    id: 'round-premium',
+    name: 'Assento Sanitário Almofadado Redondo',
+    shape: 'universal',
+    price: 189.90,
+    originalPrice: 199.90,
+    holeDistance: '15cm',
+    features: ['Fechamento Suave (Não bate)', 'Acabamento Premium', 'Fácil limpeza'],
+    rating: { stars: 5, count: 30 },
+    images: ['/images/redondo-comum.png'],
+    testimonial: {
+      name: 'Julia C.',
+      text: 'Muito melhor que o comum. Vale o preço.'
+    }
+  },
   // ECONOMY & LUXURY MOCKS
   {
+    id: 'eco-round',
+    name: 'Assento Sanitário Universal Polipropileno',
+    shape: 'universal',
+    price: 79.90,
+    features: ['Versão econômica adaptável', 'Instalação simples para vasos padrões'],
+    imageUrl: '/images/assento-redondo-basico-1.png'
+  },
+  {
     id: 'eco-square',
-    name: 'Versão Básica (Plástico PP)',
+    name: 'Assento Rígido Classique Paris/Sabatini',
     shape: 'square',
-    price: 89.9,
-    features: ['Polipropileno (Básico)', 'Ideal para aluguel'],
+    price: 119.90,
+    features: ['Opção simples em plástico rígido', 'Resistente', 'A tampa bate ao fechar (não é soft close)'],
     imageUrl: '/images/quadrado-branco.png' // Using same image for now or placeholder
   },
   {
@@ -85,11 +111,27 @@ export const PRODUCTS: Product[] = [
     price: 409.9,
     features: ['Alto Brilho e Design'],
     imageUrl: '/images/quadrado-astra.png'
+  },
+  {
+    id: 'lux-oval',
+    name: 'Versão Luxo (Resina)',
+    shape: 'oval',
+    price: 409.9,
+    features: ['Alto Brilho e Design', 'Cores Exclusivas'],
+    imageUrl: '/images/assento-oval-premium-1.jpg'
+  },
+  {
+    id: 'lux-round',
+    name: 'Versão Luxo (Resina)',
+    shape: 'universal',
+    price: 409.9,
+    features: ['Alto Brilho e Design', 'Cores Exclusivas'],
+    imageUrl: '/images/redondo-comum.png'
   }
 ];
 
 export function getRecommendations(shape: string): ProductRecommendations | null {
-  const mainProduct = PRODUCTS.find(p => p.shape === shape && !p.id.startsWith('eco-') && !p.id.startsWith('lux-'));
+  let mainProduct = PRODUCTS.find(p => p.shape === shape && !p.id.startsWith('eco-') && !p.id.startsWith('lux-') && p.id !== 'round-premium');
 
   if (!mainProduct) return null;
 
@@ -100,6 +142,25 @@ export function getRecommendations(shape: string): ProductRecommendations | null
   if (shape === 'square') {
     economy = PRODUCTS.find(p => p.id === 'eco-square');
     luxury = PRODUCTS.find(p => p.id === 'lux-square');
+  } else if (shape === 'oval') {
+    economy = {
+      id: 'eco-oval',
+      name: 'Assento Sanitário Universal Polipropileno',
+      shape: 'oval',
+      price: 79.90,
+      features: ['O modelo de entrada', 'Plástico fino e funcional', 'Para quem quer economizar ao máximo'],
+      imageUrl: '/images/assento-oval-premium-1.jpg'
+    };
+    luxury = PRODUCTS.find(p => p.id === 'lux-oval');
+  } else if (shape === 'universal') {
+    economy = PRODUCTS.find(p => p.id === 'eco-round');
+    luxury = PRODUCTS.find(p => p.id === 'lux-round');
+  }
+
+  // Override mainProduct for Universal to choose Premium one if available
+  if (shape === 'universal') {
+    const premiumRound = PRODUCTS.find(p => p.id === 'round-premium');
+    if (premiumRound) mainProduct = premiumRound;
   }
 
   return {
@@ -109,14 +170,15 @@ export function getRecommendations(shape: string): ProductRecommendations | null
   };
 }
 
-export function getCheckoutUrl(productId: string): string {
-  // Direct link to Nuvemshop cart
-  const STORE_DOMAIN = 'https://loja-exemplo-nuvemshop.com.br';
-  return `${STORE_DOMAIN}/carrinho/adicionar/${productId}`;
+
+export function getCheckoutUrl(product: Product): string {
+  // Redirect to WhatsApp for purchase negotiation
+  return getWhatsAppUrl(`Olá! Quero comprar o ${product.name} (R$ ${product.price.toFixed(2)}). Como prosseguir?`);
 }
 
 export function getWhatsAppUrl(text: string): string {
-  const PHONE = '5511999999999'; // Replace with Client's Number
-  const encodedText = encodeURIComponent(text);
+  const PHONE = '552131025898'; // Updated Client Number
+  const sourceTag = " (Vim do Google)";
+  const encodedText = encodeURIComponent(text + sourceTag);
   return `https://wa.me/${PHONE}?text=${encodedText}`;
 }
