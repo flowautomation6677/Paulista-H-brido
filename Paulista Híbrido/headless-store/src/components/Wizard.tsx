@@ -110,20 +110,69 @@ export default function Wizard() {
                             exit={{ opacity: 0, y: -10 }}
                             className="space-y-0"
                         >
-                            {/* SUCCESS BAR - NEUTRAL COLOR */}
-                            <div className="bg-slate-100 text-slate-700 px-4 py-3 text-sm font-semibold flex items-center justify-center gap-2 shadow-sm border-b border-slate-200">
-                                <div className="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shrink-0">✓</div>
-                                Modelos compatíveis com VASO {selectedShape?.toUpperCase()}
+                            {/* SUCCESS BAR - DYNAMIC COLOR */}
+                            <div className={clsx(
+                                "px-4 py-3 text-sm font-semibold flex items-center justify-center gap-2 shadow-sm border-b",
+                                selectedShape === 'unknown' ? "bg-amber-100 text-amber-800 border-amber-200" : "bg-slate-100 text-slate-700 border-slate-200"
+                            )}>
+                                <div className={clsx(
+                                    "rounded-full w-5 h-5 flex items-center justify-center text-xs shrink-0",
+                                    selectedShape === 'unknown' ? "bg-amber-500 text-white" : "bg-green-600 text-white"
+                                )}>
+                                    {selectedShape === 'unknown' ? '!' : '✓'}
+                                </div>
+                                {selectedShape === 'unknown' ? 'Análise de Especialista Necessária' : `Modelos compatíveis com VASO ${selectedShape?.toUpperCase()}`}
                             </div>
 
                             {!bestChoice ? (
-                                <div className="text-center space-y-6 pt-12 p-4">
-                                    {/* FALLBACK FOR UNKNOWN OR NO PRODUCT */}
-                                    <div className="w-24 h-24 bg-yellow-100 rounded-full mx-auto flex items-center justify-center animate-pulse">
-                                        <Camera className="w-12 h-12 text-yellow-600" />
+                                <div className="text-center pt-8 p-6 pb-24">
+                                    {/* CONVERSION CARD FOR UNKNOWN SHAPE */}
+                                    <div className="bg-white rounded-2xl shadow-xl border-2 border-amber-400 p-6 relative overflow-hidden">
+                                        {/* Badge */}
+                                        <div className="absolute top-0 right-0 bg-amber-400 text-amber-900 text-[10px] font-bold px-3 py-1 rounded-bl-xl">
+                                            ATENÇÃO
+                                        </div>
+
+                                        <div className="w-20 h-20 bg-amber-100 rounded-full mx-auto flex items-center justify-center mb-4">
+                                            <Camera className="w-10 h-10 text-amber-600" />
+                                        </div>
+
+                                        <h2 className="text-2xl font-black text-gray-900 mb-2 leading-tight">
+                                            Vaso com formato exclusivo?
+                                        </h2>
+
+                                        <p className="text-gray-600 text-sm mb-6 leading-relaxed">
+                                            Existem mais de <strong className="text-gray-800">200 modelos fora de linha</strong>.
+                                            Comprar o assento errado é o erro mais comum. Não arrisque seu dinheiro.
+                                        </p>
+
+                                        {/* PRIMARY CTA */}
+                                        <a
+                                            href={getWhatsAppUrl("Olá! Tenho um vaso com formato diferente e gostaria de enviar uma foto para análise gratuita.")}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={() => reportConversion(getWhatsAppUrl("Olá! Tenho um vaso com formato diferente e gostaria de enviar uma foto para análise gratuita."))}
+                                            className="block w-full bg-green-600 hover:bg-green-700 text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-green-200 transition-transform active:scale-95 flex items-center justify-center gap-2 mb-3"
+                                        >
+                                            <Camera className="w-5 h-5" />
+                                            ENVIAR FOTO AGORA
+                                        </a>
+
+                                        <p className="text-xs text-gray-400 font-medium">
+                                            ⚡ Nossos especialistas identificam em 5 minutos
+                                        </p>
                                     </div>
-                                    <h2 className="text-2xl font-bold text-gray-900">Vamos analisar juntos!</h2>
-                                    <p className="text-gray-600">Para garantir o modelo certo, envie uma foto do seu vaso para nosso especialista.</p>
+
+                                    {/* SECONDARY LINK */}
+                                    <div className="mt-8">
+                                        <p className="text-gray-400 text-xs mb-2">Ou se preferir arriscar:</p>
+                                        <a
+                                            href="https://paulistareparoeassento.com.br/"
+                                            className="text-gray-500 underline hover:text-blue-600 text-sm font-medium"
+                                        >
+                                            Ver catálogo completo da loja
+                                        </a>
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="p-4 pt-6 space-y-6">
