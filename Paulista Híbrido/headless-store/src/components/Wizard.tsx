@@ -164,11 +164,11 @@ export default function Wizard() {
                                     </div>
 
                                     {/* SECONDARY LINK */}
-                                    <div className="mt-8">
-                                        <p className="text-gray-400 text-xs mb-2">Ou se preferir arriscar:</p>
+                                    <div className="mt-8 pt-6 border-t border-gray-100">
+                                        <p className="text-gray-400 text-xs mb-3">Prefere procurar sozinho?</p>
                                         <a
                                             href="https://paulistareparoeassento.com.br/"
-                                            className="text-gray-500 underline hover:text-blue-600 text-sm font-medium"
+                                            className="inline-block w-full py-3 bg-white border-2 border-gray-200 text-gray-600 font-bold rounded-xl hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 transition-all text-sm"
                                         >
                                             Ver catálogo completo da loja
                                         </a>
