@@ -12,6 +12,7 @@ interface AnalysisResult {
     shippingEstimates: string
     copyAnalysis: string
     competitorStrategy: string
+    marketOpportunity?: string
 }
 
 interface ProductAnalysisModalProps {

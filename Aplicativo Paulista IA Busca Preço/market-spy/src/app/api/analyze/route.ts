@@ -42,10 +42,11 @@ export async function POST(req: Request) {
         2. Lógica estimada de frete (se mencionado, ou estimativa de mercado para este tipo de item).
         3. Uma crítica breve do copy de vendas (Pontos Fortes/Fracos).
         4. Estratégia do Concorrente (Preço baixo? Premium? Kit/Bundle?).
+        5. **Oportunidade de Mercado**: Baseado nas avaliações negativas (se houver) ou falhas no anúncio, o que eu posso fazer melhor? (Ex: "Vender com nota fiscal", "Melhorar embalagem", "Oferecer cor X").
         
-        Retorne estritamente no formato JSON: { "keywords": [], "shippingEstimates": "", "copyAnalysis": "", "competitorStrategy": "" }
+        Retorne estritamente no formato JSON: { "keywords": [], "shippingEstimates": "", "copyAnalysis": "", "competitorStrategy": "", "marketOpportunity": "" }
         
-        Dados do Produto: ${productContent.substring(0, 3000)}`
+        Dados do Produto: ${productContent.substring(0, 4000)}`
             }],
             model: "gpt-3.5-turbo",
             response_format: { type: "json_object" }

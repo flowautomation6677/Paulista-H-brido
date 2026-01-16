@@ -26,6 +26,40 @@ export function ScannerForm({ onScanStart, onScanComplete, onScanError }: Scanne
     })
     const [loading, setLoading] = React.useState(false)
 
+    const [statusMessage, setStatusMessage] = React.useState("")
+    const [progress, setProgress] = React.useState(0)
+
+    const pollJobStatus = async (jobId: string) => {
+        const interval = setInterval(async () => {
+            try {
+                const res = await fetch(`/api/scan/status?id=${jobId}`)
+                const data = await res.json()
+
+                if (data.error) {
+                    throw new Error(data.error)
+                }
+
+                if (data.state === 'completed' && data.result) {
+                    clearInterval(interval)
+                    setLoading(false)
+                    onScanComplete(data.result)
+                } else if (data.state === 'failed') {
+                    clearInterval(interval)
+                    setLoading(false)
+                    onScanError(`Job falhou: ${data.error || 'Erro desconhecido'}`)
+                } else {
+                    // Update progress UI
+                    const prog = typeof data.progress === 'number' ? data.progress : 0
+                    setProgress(prog)
+                    setStatusMessage(`Processando... ${prog}% (${data.state})`)
+                }
+            } catch (err) {
+                console.error("Polling error", err)
+                // Don't stop immediately on one glitch, but maybe after X fails. keeping simple for now.
+            }
+        }, 2000)
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!keyword.trim()) return
@@ -35,6 +69,8 @@ export function ScannerForm({ onScanStart, onScanComplete, onScanError }: Scanne
         }
 
         setLoading(true)
+        setProgress(0)
+        setStatusMessage("Iniciando varredura...")
         onScanStart()
 
         try {
@@ -54,14 +90,17 @@ export function ScannerForm({ onScanStart, onScanComplete, onScanError }: Scanne
                 body: JSON.stringify(payload),
             })
 
-            if (!res.ok) throw new Error("Falha na varredura de inteligência.")
+            if (!res.ok) throw new Error("Falha ao iniciar varredura.")
 
-            const data: ScanResult = await res.json()
-            onScanComplete(data)
+            const { jobId } = await res.json()
+            if (!jobId) throw new Error("ID do Job não retornado.")
+
+            // Start polling
+            pollJobStatus(jobId)
+
         } catch (error) {
-            onScanError(error instanceof Error ? error.message : "Erro desconhecido")
-        } finally {
             setLoading(false)
+            onScanError(error instanceof Error ? error.message : "Erro desconhecido")
         }
     }
 
@@ -121,8 +160,8 @@ export function ScannerForm({ onScanStart, onScanComplete, onScanError }: Scanne
                                     className="hidden" // Hiding default, using container state for visual
                                     id="ml"
                                     checked={platforms.ml}
-                                    onChange={(e) =>
-                                        setPlatforms((prev) => ({ ...prev, ml: e.target.checked }))
+                                    onChange={(checked) =>
+                                        setPlatforms((prev) => ({ ...prev, ml: checked === true }))
                                     }
                                 />
                                 <div className={`w-4 h-4 rounded-full border ${platforms.ml ? "bg-primary border-primary" : "border-gray-500"}`} />
@@ -137,8 +176,8 @@ export function ScannerForm({ onScanStart, onScanComplete, onScanError }: Scanne
                                     className="hidden"
                                     id="shopee"
                                     checked={platforms.shopee}
-                                    onChange={(e) =>
-                                        setPlatforms((prev) => ({ ...prev, shopee: e.target.checked }))
+                                    onChange={(checked) =>
+                                        setPlatforms((prev) => ({ ...prev, shopee: checked === true }))
                                     }
                                 />
                                 <div className={`w-4 h-4 rounded-full border ${platforms.shopee ? "bg-primary border-primary" : "border-gray-500"}`} />
@@ -155,7 +194,7 @@ export function ScannerForm({ onScanStart, onScanComplete, onScanError }: Scanne
                         {loading ? (
                             <>
                                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                Iniciando Protocolo de Varredura...
+                                {statusMessage || "Iniciando Protocolo..."}
                             </>
                         ) : (
                             <>

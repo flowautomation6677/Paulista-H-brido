@@ -12,8 +12,15 @@ export interface Product {
         totalCost: number
         estimatedProfit: number
         profitMarginPercent: number
+        margin?: {
+            fees: number
+            shipping: number
+            totalCost: number
+            estimatedProfit: number
+            profitMarginPercent: number
+        }
+        salesVolume?: string
     }
-}
 
 export interface ScanResult {
     products: Product[]

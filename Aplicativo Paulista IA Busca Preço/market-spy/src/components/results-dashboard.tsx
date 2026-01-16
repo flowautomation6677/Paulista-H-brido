@@ -161,6 +161,7 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
                                             <ArrowUpDown className={`w-3 h-3 ${sortField === 'cost' ? 'text-primary' : 'text-gray-600 group-hover:text-gray-400'}`} />
                                         </div>
                                     </th>
+                                    <th className="px-6 py-4 font-medium tracking-wider text-center">Vendas</th>
                                     <th
                                         className="px-6 py-4 font-medium tracking-wider text-right cursor-pointer hover:text-white transition-colors group"
                                         onClick={() => handleSort('profit')}
@@ -211,6 +212,9 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
                                         <td className="px-6 py-4 font-medium text-gray-300">
                                             R$ {product.price.toFixed(2)}
                                         </td>
+                                        <td className="px-6 py-4 text-center font-medium text-blue-400">
+                                            {product.salesVolume || "--"}
+                                        </td>
                                         <td className="px-6 py-4 text-right text-gray-500 font-mono text-xs">
                                             - R$ {product.margin?.totalCost.toFixed(2)}
                                         </td>
@@ -260,6 +264,6 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
                 productTitle={selectedProduct?.title || ''}
                 platform={selectedProduct?.platform as 'mercadolivre' | 'shopee'}
             />
-        </div>
+        </div >
     )
 }

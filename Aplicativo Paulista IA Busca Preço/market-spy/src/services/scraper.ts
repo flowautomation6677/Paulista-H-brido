@@ -263,7 +263,7 @@ export class ScraperService {
 
             await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 })
 
-            // Extract content for AI
+            // Extract content for AI (Description + Specs + Reviews)
             const content = await page.evaluate((platform) => {
                 let text = ''
                 if (platform === 'mercadolivre') {
@@ -272,12 +272,17 @@ export class ScraperService {
                     const price = document.querySelector('.andes-money-amount__fraction')?.textContent || ''
                     const description = document.querySelector('.ui-pdp-description__content')?.textContent || ''
                     const specs = Array.from(document.querySelectorAll('.ui-pdp-specs__table tr')).map(tr => tr.textContent).join(' ')
-                    text = `Title: ${title}\nPrice: ${price}\nSpecs: ${specs}\nDescription: ${description}`
+
+                    // Review Mining (Attempt to get negative reviews text)
+                    // ML usually shows a few reviews. We grab available text.
+                    const reviews = Array.from(document.querySelectorAll('.ui-pdp-reviews__comments__review-comment')).map(c => c.textContent).join(' | ');
+
+                    text = `Title: ${title}\nPrice: ${price}\nSpecs: ${specs}\nDescription: ${description}\nReviews (User Feedback): ${reviews}`
                 } else {
                     // Shopee
-                    const title = document.querySelector('.attM6y')?.textContent || '' // Class names change often on Shopee, using generic strategy is better but for detailed view we try to get body text
+                    const title = document.querySelector('.attM6y')?.textContent || ''
                     const body = document.body.innerText
-                    text = body.substring(0, 5000) // Shopee is SPA/complex, grabbing raw text is safer for AI
+                    text = body.substring(0, 6000) // Increased limit to capture potential reviews at bottom
                 }
                 return text.replace(/\s+/g, ' ').trim()
             }, platform)
