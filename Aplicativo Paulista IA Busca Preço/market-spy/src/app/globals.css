@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* MarketSpy Deep Indigo & Violet Theme - Light (Fallback, but default will be forced dark for vibe) */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 5%;
+    /* Slightly lighter than bg */
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 263 70% 50%;
+    /* Vibrant Violet */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 263 70% 50%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 263 70% 50%;
+
+    --radius: 0.75rem;
+  }
+
+  /* Force Dark Mode defaults even without class */
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary/30;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+
+  /* Glassmorphism utility */
+  .glass-panel {
+    @apply bg-background/60 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
+
+  .glass-input {
+    @apply bg-background/50 border-white/10 focus-visible:ring-primary/50 transition-all duration-300;
+  }
+
+  /* Neon Glow effect */
+  .neon-glow {
+    box-shadow: 0 0 20px -5px hsl(var(--primary));
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted rounded-full border-4 border-background;
+}
