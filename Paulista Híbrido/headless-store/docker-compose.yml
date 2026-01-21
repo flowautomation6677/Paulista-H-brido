@@ -1,0 +1,9 @@
+services:
+  headless-store:
+    build: .
+    container_name: headless-store
+    restart: always
+    ports:
+      - "4000:3000"
+    environment:
+      - NODE_ENV=production
